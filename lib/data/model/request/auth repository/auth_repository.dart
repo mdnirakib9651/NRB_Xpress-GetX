@@ -11,8 +11,8 @@ class AuthRepo{
 
   /// --------------->>>>> LogIn Controller <<<<<-----------------
   /// 1.
-  Future<Response> logIn({required String email, required String password})async{
-    return await apiClient.postData(AppConstants.logIn, {"email": email, "password": password, "device_name": "android"});
+  Future<Response> logIn({required String email, required String password, required double latitude, required double longitude, required String address})async{
+    return await apiClient.postData(AppConstants.logIn, {"email": email, "password": password, "device_name": "android", "latitude": latitude, "longitude": longitude, "address": address});
   }
   /// 2.
   Future<void> setLogIn(bool isLogIn) async{
@@ -42,6 +42,10 @@ class AuthRepo{
     }
   }
 
+  Future<Response> logOut({required double latitude, required double longitude, required String address}) async{
+    return await apiClient.postData(AppConstants.logOut, {"latitude": latitude, "longitude": longitude, "address": address});
+  }
+
   /// --------------->>>>> DashBoardData Controller <<<<<-----------------
   /// 1.
   Future<Response> dashBoard()async{
@@ -55,9 +59,7 @@ class AuthRepo{
   }
 
   /// ----------------->>>>> Log Out <<<<<<------------------
-  Future<Response> logOut() async{
-    return await apiClient.postData(AppConstants.logOut, {});
-  }
+
 
   /// ----------------->>>>> Change Password <<<<<<------------------
   Future<Response> changePass({required String oldPass, required String newPass, required String confirmPass}) async{

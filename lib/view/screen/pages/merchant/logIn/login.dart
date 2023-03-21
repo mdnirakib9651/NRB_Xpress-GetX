@@ -1,3 +1,4 @@
+// ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -22,6 +23,13 @@ class _LogInHereState extends State<LogInHere> {
   RegisterController registerController = RegisterController();
   AuthController authController = Get.find<AuthController>();
   GlobalKey<FormState> logInKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    authController.getLocation();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +198,11 @@ class _LogInHereState extends State<LogInHere> {
                                   String email = registerController.emailController.text ?? "";
                                   registerController.emailItem(email);
                                   String pass = registerController.passController.text.trim();
-                                  authController.logIn(email, pass).then((response){
+                                  if(authController.getCurrentPosition == null){
+                                    EasyLoading.showError("Location not Found, Please turn on GPS");
+                                    return;
+                                  }
+                                  authController.logIn(email: email, password: pass, latitude: authController.getCurrentPosition!.latitude, longitude: authController.getCurrentPosition!.longitude, address: authController.currentAddress.toString(), ).then((response){
                                     if(response.isSuccess){
                                       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const RiderDeshboard()), (route) => true);
                                       EasyLoading.showSuccess(response.message);

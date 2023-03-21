@@ -22,6 +22,7 @@ class OrderController extends GetxController implements GetxService{
     return response;
   }
 
+
   // List<AssignOrderData>? _assignOrderList=<AssignOrderData>[].obs;
   // List<AssignOrderData>? get getAssignOrderList=>_assignOrderList;
   // dateWiseSearch(){

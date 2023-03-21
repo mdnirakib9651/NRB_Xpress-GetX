@@ -72,7 +72,7 @@ class _RiderDrawerState extends State<RiderDrawer> {
                 focusColor: Colors.transparent,
                 onTap: (){
                   setState(() {
-                    authController.logOut().then((value){
+                    authController.logOut(latitude: authController.getCurrentPosition!.latitude, longitude: authController.getCurrentPosition!.longitude, address: authController.currentAddress.toString()).then((value){
                       if(value.isSuccess){
                         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LogInHere(isMerchant: false,)), (route) => true);
                         EasyLoading.showSuccess(value.message);

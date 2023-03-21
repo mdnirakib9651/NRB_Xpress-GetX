@@ -7,7 +7,6 @@ import 'package:merchant/utils/color_resources.dart';
 import 'package:merchant/utils/images.dart';
 import 'package:merchant/utils/lato_styles.dart';
 import 'package:merchant/view/screen/pages/merchant/menu%20screen/changepassword.dart';
-import 'package:merchant/view/screen/pages/merchant/menu%20screen/logout.dart';
 import '../../../../../data/model/response/menu_model.dart';
 import '../../../../../utils/dimensions.dart';
 import '../../merchant/logIn/login.dart';
@@ -46,7 +45,7 @@ class _DashBoardRiderScreenState extends State<DashBoardRiderScreen> {
           )
         ],
       ),
-      content: const Text("Are you sure want to log out?", style: TextStyle(fontSize:Dimensions.fontSizeLarge,color: ColorResources.black)),
+      content: const Text("Are you sure want to logout?", style: TextStyle(fontSize:Dimensions.fontSizeLarge,color: ColorResources.black)),
       actions: [
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -75,7 +74,7 @@ class _DashBoardRiderScreenState extends State<DashBoardRiderScreen> {
                 focusColor: Colors.transparent,
                 onTap: (){
                   setState(() {
-                    authController.logOut().then((value){
+                    authController.logOut(latitude: authController.getCurrentPosition!.latitude, longitude: authController.getCurrentPosition!.longitude, address: authController.currentAddress.toString()).then((value){
                       if(value.isSuccess){
                         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LogInHere(isMerchant: false,)), (route) => true);
                         EasyLoading.showSuccess(value.message);
