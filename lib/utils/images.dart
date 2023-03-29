@@ -14,4 +14,5 @@ class Images{
   static const String giftBox = 'assets/icons/gift-box.png';
   static const String telePhone = 'assets/icons/telephone.png';
   static const String telePhone1 = 'assets/icons/telephone1.png';
+  static const String nrbLogo = 'assets/images/nrb_logo.png';
 }

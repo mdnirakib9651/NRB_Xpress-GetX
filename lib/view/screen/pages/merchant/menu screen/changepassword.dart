@@ -30,10 +30,10 @@ class _ChangePasswordState extends State<ChangePassword> {
     return Scaffold(
         backgroundColor: ColorResources.backgroundColor,
         appBar: AppBar(
-          backgroundColor: ColorResources.colorPrimary,
+          backgroundColor: ColorResources.colorPrimaryRider,
           elevation: 0.0,
           title: Text(
-            "LogIn",
+            "Change Password",
             style: latoRegular.copyWith(
                 fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
           ),
@@ -69,7 +69,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   child: const Icon(
                                     Icons.lock,
                                     size: 25,
-                                    color: ColorResources.colorPrimary,
+                                    color: ColorResources.colorPrimaryRider,
                                   ),
                                 ),
                                 Container(
@@ -107,7 +107,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                                 isPassVasiable = !isPassVasiable;
                                               });
                                             },
-                                            icon: Icon(isPassVasiable ? Icons.visibility_off : Icons.visibility, color: ColorResources.colorPrimary,)),
+                                            icon: Icon(isPassVasiable ? Icons.visibility_off : Icons.visibility, color: ColorResources.colorPrimaryRider,)),
                                       ),
                                     ),
                                   ),
@@ -133,7 +133,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   child: const Icon(
                                     Icons.lock,
                                     size: 25,
-                                    color: ColorResources.colorPrimary,
+                                    color: ColorResources.colorPrimaryRider,
                                   ),
                                 ),
                                 Container(
@@ -172,7 +172,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                               isNewPassVasiable = !isNewPassVasiable;
                                             });
                                           },
-                                          icon: Icon(isNewPassVasiable ? Icons.visibility_off : Icons.visibility, color: ColorResources.colorPrimary,)),
+                                          icon: Icon(isNewPassVasiable ? Icons.visibility_off : Icons.visibility, color: ColorResources.colorPrimaryRider,)),
                                       ),
                                     ),
                                   ),
@@ -198,7 +198,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   child: const Icon(
                                     Icons.lock,
                                     size: 25,
-                                    color: ColorResources.colorPrimary,
+                                    color: ColorResources.colorPrimaryRider,
                                   ),
                                 ),
                                 Container(
@@ -238,7 +238,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                                 isConPassVasiable = !isConPassVasiable;
                                               });
                                             },
-                                            icon: Icon(isConPassVasiable ? Icons.visibility_off : Icons.visibility, color: ColorResources.colorPrimary,)),
+                                            icon: Icon(isConPassVasiable ? Icons.visibility_off : Icons.visibility, color: ColorResources.colorPrimaryRider,)),
                                       ),
                                     ),
                                   ),
@@ -274,7 +274,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   height: 45,
                                   width: 140,
                                   decoration: BoxDecoration(
-                                      color: ColorResources.colorPrimary,
+                                      color: ColorResources.colorPrimaryRider,
                                       borderRadius: BorderRadius.circular(5)),
                                   child: Center(
                                       child: Text(

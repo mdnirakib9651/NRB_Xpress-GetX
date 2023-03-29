@@ -17,7 +17,7 @@ class ApiClient extends GetConnect implements GetxService {
     baseUrl = appBaseUrl;
     timeout = const Duration(seconds: 30);
     token = sharedPreferences.getString(AppConstants.token);
-    // debugPrint('Token: $token');
+    debugPrint('Token =========: $token');
     _mainHeaders = {
       'Accept': 'application/json',
       'Content-Type': 'application/json; charset=UTF-8',

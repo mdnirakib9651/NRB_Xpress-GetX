@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:merchant/helper/remote/api_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,8 +18,8 @@ class AuthRepo{
   /// 2.
   Future<void> setLogIn(bool isLogIn) async{
     try{
-      await sharedPreferences.setBool(AppConstants.logIn, isLogIn);
-      print("Set Is LogIn: ${sharedPreferences.getBool(AppConstants.logIn)}");
+      await sharedPreferences.setBool(AppConstants.isLogIn, isLogIn);
+      print("Set Is LogIn: ${sharedPreferences.getBool(AppConstants.isLogIn)}");
     } catch(e){
       print("Set Is Login: $e");
       rethrow;
@@ -36,14 +37,22 @@ class AuthRepo{
   Future<void> saveUserToken(String token) async{
     apiClient.updateHeader(token);
     try{
-      await sharedPreferences.setString(AppConstants.token, token);
+       await sharedPreferences.setString(AppConstants.token, token);
+      debugPrint("token Save : $token");
     } catch (e){
       rethrow;
     }
   }
-
+  String? getToken(){
+    return   sharedPreferences.getString(AppConstants.token);
+  }
+  ///5 .
   Future<Response> logOut({required double latitude, required double longitude, required String address}) async{
     return await apiClient.postData(AppConstants.logOut, {"latitude": latitude, "longitude": longitude, "address": address});
+  }
+  /// 6.
+  bool getIsLogin()  {
+    return sharedPreferences.getBool(AppConstants.isLogIn) ?? false;
   }
 
   /// --------------->>>>> DashBoardData Controller <<<<<-----------------

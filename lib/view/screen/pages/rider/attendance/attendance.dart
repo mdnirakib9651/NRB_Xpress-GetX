@@ -1,11 +1,10 @@
 // ignore_for_file: unnecessary_null_comparison
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:merchant/data/controller/account%20order%20controller/account%20order%20controller.dart';
-import 'package:merchant/data/controller/account%20order%20controller/check_controller.dart';
-import 'package:merchant/data/model/response/rider%20model/check_box_state.dart';
+import 'package:merchant/data/controller/orderController.dart';
+import 'package:merchant/data/controller/rider%20controller/attendance_controller.dart';
 import 'package:merchant/utils/color_resources.dart';
 import 'package:merchant/utils/dimensions.dart';
 import 'package:merchant/utils/lato_styles.dart';
@@ -20,114 +19,133 @@ class Attendance extends StatefulWidget {
 class _AttendanceState extends State<Attendance> {
 
   AccountOrderController accountOrderController = Get.find<AccountOrderController>();
+  RiderAttendenceController riderAttendenceController = Get.find<RiderAttendenceController>();
   bool allSelect = false;
-  bool _isPressed = false;
 
+  GlobalKey formKey = GlobalKey<FormState>();
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
-    // Get.put(NotHandOverController());
-    // Get.find<NotHandOverController>().getNotHandDataList();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      accountOrderController.dateWiseSearch("not_yet_handed_over");
+      riderAttendenceController.dateWiseSearch("attendances");
     });
+    super.initState();
+    Get.put(OrderController());
+    Get.find<OrderController>().getOrderListData();
   }
 
   @override
   Widget build(BuildContext context) {
-    CheckController checkBox = Get.find<CheckController>();
-    return GetBuilder<AccountOrderController>(
-      // init: NotHandOverController(),
-        builder: (order){
-          return Scaffold(
+    return GetBuilder<RiderAttendenceController>(
+        // init: OrderController(),
+        builder: (riderAttendence){
+          return riderAttendence.riderAttendenceList != null
+          ? Scaffold(
+            appBar: AppBar(
+              elevation: 0.0,
+              backgroundColor: ColorResources.colorPrimaryRider,
+              leading: IconButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                onPressed: (){
+                  Get.back();
+                },
+                icon: const Icon(Icons.arrow_back, color: Colors.white,),
+              ),
+              title: Text("ORDERS", style: latoRegular.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
+            ),
             backgroundColor: ColorResources.backgroundColor,
-            body: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: (){
-                              order.chooseFromDate(context);
-                            },
-                            child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  color: ColorResources.white,
-                                  borderRadius: BorderRadius.circular(8)
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("${order.fromDate}", style: latoRegular.copyWith(fontSize: 18, color: Colors.grey,),),
-                                    const Icon(Icons.perm_contact_cal_outlined, color: Colors.grey,),
-                                  ],
+            body: Padding(
+              padding: const EdgeInsets.all(10),
+              child: LazyLoadScrollView(
+                onEndOfPage: riderAttendence.loadNextPage,
+                isLoading: riderAttendence.lastPage,
+                child: ListView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: (){
+                                riderAttendence.chooseFromDate(context);
+                              },
+                              child: Container(
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    color: ColorResources.white,
+                                    borderRadius: BorderRadius.circular(8)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("${riderAttendence.fromDate}", style: latoRegular.copyWith(fontSize: 18, color: Colors.grey,),),
+                                      const Icon(Icons.perm_contact_cal_outlined, color: Colors.grey,),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 10,),
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                              color: ColorResources.white,
-                              borderRadius: BorderRadius.circular(8)
-                          ),
-                          child: const Center(child: Text("To", style: latoBold, )),
-                        ),
-                        const SizedBox(width: 10,),
-                        Expanded(
-                          child: InkWell(
-                            onTap: (){},
-                            child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  color: ColorResources.white,
-                                  borderRadius: BorderRadius.circular(8)
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("${order.toDate}", style: latoRegular.copyWith(fontSize: 18, color: Colors.grey,),),
-                                    const Icon(Icons.perm_contact_cal_outlined, color: Colors.grey,),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8,),
-                        InkWell(
-                          onTap: (){
-                            order.dateWiseSearch("not_yet_handed_over");
-                          },
-                          child: Container(
+                          const SizedBox(width: 10,),
+                          Container(
                             height: 40,
                             width: 40,
                             decoration: BoxDecoration(
-                              color: ColorResources.colorPrimaryRider,
-                              borderRadius: BorderRadius.circular(8),
+                                color: ColorResources.white,
+                                borderRadius: BorderRadius.circular(8)
                             ),
-                            child: const Icon(Icons.search, color: Colors.white,),
+                            child: const Center(child: Text("To", style: latoBold, )),
                           ),
-                        )
-                      ],
+                          const SizedBox(width: 10,),
+                          Expanded(
+                            child: InkWell(
+                              onTap: (){},
+                              child: Container(
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    color: ColorResources.white,
+                                    borderRadius: BorderRadius.circular(8)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("${riderAttendence.toDate}", style: latoRegular.copyWith(fontSize: 18, color: Colors.grey,),),
+                                      const Icon(Icons.perm_contact_cal_outlined, color: Colors.grey,),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8,),
+                          InkWell(
+                            onTap: (){
+                              riderAttendence.dateWiseSearch("attendances");
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color: ColorResources.colorPrimaryRider,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Icon(Icons.search, color: Colors.white,),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Container(
+                    const SizedBox(height: 10,),
+                    Container(
                       height: 50,
                       width: MediaQuery.of(context).size.width,
                       decoration: const BoxDecoration(
@@ -145,267 +163,84 @@ class _AttendanceState extends State<Attendance> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("SENDER", style: latoRegular.copyWith(fontSize: Dimensions.fontSizeExtraLarge, fontWeight: FontWeight.bold),),
-                            Text("RECEIVER", style: latoRegular.copyWith(fontSize: Dimensions.fontSizeExtraLarge, fontWeight: FontWeight.bold),),
-                            Text("STATUS", style: latoRegular.copyWith(fontSize: Dimensions.fontSizeExtraLarge, fontWeight: FontWeight.bold),),
+                            Text("Date", style: latoRegular.copyWith(fontSize: Dimensions.fontSizeExtraLarge, fontWeight: FontWeight.bold),),
+                            Text("Check In", style: latoRegular.copyWith(fontSize: Dimensions.fontSizeExtraLarge, fontWeight: FontWeight.bold),),
+                            Text("Check Out", style: latoRegular.copyWith(fontSize: Dimensions.fontSizeExtraLarge, fontWeight: FontWeight.bold),),
                           ],
                         ),
                       ),
                     ),
-                  ),
-                  GetBuilder<AccountOrderController>(
-                    builder: (orderController){
-                      return orderController.accountsOrderList != null ?
-                      LazyLoadScrollView(
-                          onEndOfPage: orderController.loadNextPage,
-                          isLoading: orderController.lastPage,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height - 330,
-                              width: MediaQuery.of(context).size.width,
-                              child: NotificationListener<OverscrollIndicatorNotification>(
-                                onNotification: (overScroll){
-                                  overScroll.disallowIndicator();
-                                  return true;
-                                },
-                                child: Column(
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height - 275,
+                      width: MediaQuery.of(context).size.width,
+                      child: NotificationListener<OverscrollIndicatorNotification>(
+                        onNotification: (overScroll){
+                          overScroll.disallowIndicator();
+                          return true;
+                        },
+                        child: ListView.builder(
+                            itemCount: riderAttendence.riderAttendenceList.length,
+                            itemBuilder: (BuildContext context, int index){
+                              return Card(
+                                color: Colors.grey[100],
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Expanded(
-                                      child: ListView.builder(
-                                          itemCount: orderController.accountsOrderList.length,
-                                          itemBuilder: (BuildContext context, int index){
-                                            return GestureDetector(
-                                              onLongPressStart: (_){
-                                                Future.delayed(const Duration(seconds: 1), () {
-                                                  setState(() {
-                                                    _isPressed = true;
-                                                  });
-                                                });
-                                              },
-                                              child: _isPressed
-                                                  ? Card(
-                                                color: Colors.grey[100],
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Checkbox(
-                                                        value: orderController.isSelected![index],
-                                                        activeColor: ColorResources.colorPrimaryRider,
-                                                        onChanged: (value){
-                                                          setState(() {
-                                                            orderController.isSelected![index] = value;
-                                                            CheckModel check = CheckModel(orderController.accountsOrderList[index], 1);
-                                                            CheckController checkController = Get.find<CheckController>();
-                                                            if(checkController.isCheck(check)){
-                                                              checkController.removeFromCheck(check);
-                                                              // ScaffoldMessenger.of(context).showSnackBar(snackBar("Removed From Check"));
-                                                            } else{
-                                                              checkController.addToCheck(check);
-                                                              // ScaffoldMessenger.of(context).showSnackBar(snackBar("Added To Favourite"));
-                                                            }
-                                                          });
-                                                        }),
-                                                    SizedBox(
-                                                      // color: Colors.blue,
-                                                      width: Get.width/3.8,
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            Text("${orderController.accountsOrderList[index].id}", style: latoRegular.copyWith(fontSize: Dimensions.fontSizeExtraLarge, color: Colors.black, fontWeight: FontWeight.bold),),
-                                                            const SizedBox(height: 8,),
-                                                            Text(orderController.accountsOrderList[index].sender, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),),
-                                                            const SizedBox(height: 5,),
-                                                            Text(orderController.accountsOrderList[index].senderAddress, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, overflow: TextOverflow.ellipsis), maxLines: 2,),
-                                                            const SizedBox(height: 5,),
-                                                            Text(orderController.accountsOrderList[index].paymentMethod, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      // color: Colors.red,
-                                                      width: Get.width/3.4,
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: Column(
-                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            Text(orderController.accountsOrderList[index].recieverName, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Colors.black, fontWeight: FontWeight.bold),),
-                                                            const SizedBox(height: 5,),
-                                                            Text(orderController.accountsOrderList[index].receiverAddress, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, overflow: TextOverflow.ellipsis), maxLines: 2,),
-                                                            Row(
-                                                              mainAxisAlignment: MainAxisAlignment.start,
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                const Icon(Icons.add_call, color: Colors.grey, size: 20,),
-                                                                Text(orderController.accountsOrderList[index].recieverPhone, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),),
-                                                              ],
-                                                            ),
-                                                            const SizedBox(height: 5,),
-                                                            Text("Item Type : ${orderController.accountsOrderList[index].shipmentItemType}", style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),),
-                                                            RichText(
-                                                              text: TextSpan(
-                                                                children: <TextSpan>[
-                                                                  TextSpan(text: "Amount: ", style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.black)),
-                                                                  TextSpan(text: "${orderController.accountsOrderList[index].amount}", style: latoRegular.copyWith( color: Colors.black, fontSize: Dimensions.fontSizeDefault, fontWeight: FontWeight.bold)),
-                                                                  TextSpan(text: " Tk", style: latoRegular.copyWith(fontSize: Dimensions.fontSizeSmall,  color: Colors.black)),
-                                                                ],
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.all(8.0),
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          const SizedBox(height: 5,),
-                                                          Text(orderController.accountsOrderList[index].date, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Colors.black, fontWeight: FontWeight.bold),),
-                                                          const SizedBox(height: 5,),
-                                                          Container(
-                                                            height: 35,
-                                                            width: 80,
-                                                            decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.circular(3),
-                                                              color: ColorResources.colorPrimaryRider,
-                                                            ),
-                                                            child: const Center(child: Text("Hand Over", style: TextStyle(color: Colors.white),)),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                                  : Card(
-                                                color: Colors.grey[100],
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    SizedBox(
-                                                      width: Get.width/3.2,
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            Text("${orderController.accountsOrderList[index].id}", style: latoRegular.copyWith(fontSize: Dimensions.fontSizeExtraLarge, color: Colors.black, fontWeight: FontWeight.bold),),
-                                                            const SizedBox(height: 8,),
-                                                            Text(orderController.accountsOrderList[index].sender, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),),
-                                                            const SizedBox(height: 5,),
-                                                            Text(orderController.accountsOrderList[index].senderAddress, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, overflow: TextOverflow.ellipsis), maxLines: 2,),
-                                                            const SizedBox(height: 5,),
-                                                            Text(orderController.accountsOrderList[index].paymentMethod, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: Get.width/3.2,
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: Column(
-                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            Text(orderController.accountsOrderList[index].recieverName, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeExtraLarge, color: Colors.black, fontWeight: FontWeight.bold),),
-                                                            const SizedBox(height: 5,),
-                                                            Text(orderController.accountsOrderList[index].receiverAddress, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, overflow: TextOverflow.ellipsis), maxLines: 2,),
-                                                            Row(
-                                                              mainAxisAlignment: MainAxisAlignment.start,
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                const Icon(Icons.add_call, color: Colors.grey, size: 20,),
-                                                                Text(orderController.accountsOrderList[index].recieverPhone, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),),
-                                                              ],
-                                                            ),
-                                                            const SizedBox(height: 5,),
-                                                            Text("Item Type : ${orderController.accountsOrderList[index].shipmentItemType}", style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),),
-                                                            RichText(
-                                                              text: TextSpan(
-                                                                children: <TextSpan>[
-                                                                  TextSpan(text: "Amount: ", style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.black)),
-                                                                  TextSpan(text: "${orderController.accountsOrderList[index].amount}", style: latoRegular.copyWith( color: Colors.black, fontSize: Dimensions.fontSizeDefault, fontWeight: FontWeight.bold)),
-                                                                  TextSpan(text: " Tk", style: latoRegular.copyWith(fontSize: Dimensions.fontSizeSmall,  color: Colors.black)),
-                                                                ],
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.all(8.0),
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          const SizedBox(height: 5,),
-                                                          Text(orderController.accountsOrderList[index].date, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Colors.black, fontWeight: FontWeight.bold),),
-                                                          const SizedBox(height: 5,),
-                                                          Container(
-                                                            height: 35,
-                                                            width: 80,
-                                                            decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.circular(3),
-                                                              color: ColorResources.colorPrimaryRider,
-                                                            ),
-                                                            child: const Center(child: Text("Hand Over", style: TextStyle(color: Colors.white),)),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                      ),
-                                    ),
-                                    checkBox.checkList.isNotEmpty ?
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 10,right: 10),
+                                      padding: const EdgeInsets.all(8.0),
                                       child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            children: [
-                                              Text("Amount : ", style: latoBold.copyWith(fontWeight: FontWeight.bold, color: ColorResources.black, fontSize: 20),),
-                                              Text("${checkBox.amount}", style: latoBold.copyWith(color: ColorResources.black, fontSize: 16, ),),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 5,),
                                           Container(
-                                            height: 40,
-                                            width: MediaQuery.of(context).size.width,
+                                            height: 35,
+                                            width: MediaQuery.of(context).size.width / 6,
                                             decoration: BoxDecoration(
-                                                color: ColorResources.colorPrimaryRider,
-                                                borderRadius: BorderRadius.circular(10)
+                                              borderRadius: BorderRadius.circular(8),
+                                              color: ColorResources.colorPrimaryRider,
                                             ),
-                                            child: Center(child: Text("Delete ${checkBox.checkList.length}", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: ColorResources.white),)),
+                                            child: Center(child: Text(riderAttendence.riderAttendenceList[index].date.substring(0, 10).trim(), style: const TextStyle(color: Colors.white),)),
                                           ),
                                         ],
                                       ),
-                                    ) : const SizedBox()
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(riderAttendence.riderAttendenceList[index].checkinTime, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Colors.black, fontWeight: FontWeight.bold),),
+                                          const SizedBox(height: 8,),
+                                          SizedBox(
+                                              width: MediaQuery.of(context).size.width / 3.4,
+                                              child: Text(riderAttendence.riderAttendenceList[index].checkinAddress, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),)),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(riderAttendence.riderAttendenceList[index].checkoutTime, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Colors.black, fontWeight: FontWeight.bold),),
+                                          const SizedBox(height: 8,),
+                                          SizedBox(
+                                              width: MediaQuery.of(context).size.width / 3.5,
+                                              child: Text(riderAttendence.riderAttendenceList[index].checkinAddress, style: latoRegular.copyWith(fontSize: Dimensions.fontSizeDefault),)),
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
-                              ),
-                            ),
-                          )
-                      ): const Center(child: CircularProgressIndicator(),);
-                    },
-                  )
-                ],
+                              );
+                            }
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          );
+          ) : const Center(child: CircularProgressIndicator(),);
         });
   }
 }

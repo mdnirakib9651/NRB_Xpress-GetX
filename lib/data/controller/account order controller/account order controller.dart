@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:merchant/data/model/request/rider%20repository/account_order_model.dart';
+import 'package:merchant/data/model/response/rider%20model/account_order_model.dart';
 import '../../../helper/pagination_filter.dart';
 import '../../model/response/base/response_model.dart';
-import '../../model/response/rider model/account order repository/account order repository.dart';
+import '../../model/request/rider repository/account order repository.dart';
 
 class AccountOrderController extends GetxController{
   AccountOrderRepo accountOrderRepo;
   AccountOrderController({required this.accountOrderRepo});
 
   /// ----------->>>>>>>>>>>> Page Data list limit check Helper
-  var _paginationFilter = PaginationFilter().obs;
+  final _paginationFilter = PaginationFilter().obs;
   bool _lastPage = false;
 
   /// onno method get korar jonno
@@ -20,7 +20,7 @@ class AccountOrderController extends GetxController{
   bool get lastPage => _lastPage;
 
   /// ----------->>>>>>>>>>>> Account order Response <<<<<<<<<<<---------------
-  List<AccountOrderData> _accountOrderList = <AccountOrderData>[].obs;
+  final List<AccountOrderData> _accountOrderList = <AccountOrderData>[].obs;
   List<AccountOrderData> get accountsOrderList => _accountOrderList;
 
 
@@ -48,6 +48,7 @@ class AccountOrderController extends GetxController{
 
   /// ----------->>>>>>>>>>>> Init State Check <<<<<<<<<-------------
   String orderType = "not_yet_handed_over"; ///Confution
+  @override
   onInit(){
     ever(_paginationFilter, (_) => accountOrderList(orderType, page, fromDate, toDate));
     print("Curent page: $page");
@@ -78,7 +79,7 @@ class AccountOrderController extends GetxController{
   String? get  fromDate => format.format(selectedFromDate.value) ?? "";
   String? get  toDate => format.format(selectedToDate.value) ?? "";
 
-  List<bool> _isSelectedList = [];
+  final List<bool> _isSelectedList = [];
   List<bool> get isSelectedList => _isSelectedList;
 
   /// -------------->>>>> from and to date check korar jonno ei method ta toiri kora hoy..
@@ -133,7 +134,7 @@ class AccountOrderController extends GetxController{
   double _amout = 0.0;
   double get amount => _amout;
 
-  List<int> _selectedIdList = [];
+  final List<int> _selectedIdList = [];
   List<int> get selectedIdList => _selectedIdList;
 
   changeSelection(int index, bool value){
@@ -156,6 +157,5 @@ class AccountOrderController extends GetxController{
    }
     update();
   }
-
 
 }

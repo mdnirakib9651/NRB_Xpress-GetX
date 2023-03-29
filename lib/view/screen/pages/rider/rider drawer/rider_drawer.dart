@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:merchant/data/controller/auth_controller.dart';
 import 'package:merchant/utils/color_resources.dart';
+import 'package:merchant/view/screen/pages/rider/accounting/accounting.dart';
 
 import '../../../../../utils/dimensions.dart';
 import '../../merchant/logIn/login.dart';
@@ -25,6 +26,7 @@ class _RiderDrawerState extends State<RiderDrawer> {
     // TODO: implement initState
     super.initState();
     Get.find<AuthController>().getRiderDetails();
+    // authController.getLocation();
   }
 
   _showMyDialog(){
@@ -114,13 +116,21 @@ class _RiderDrawerState extends State<RiderDrawer> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: Image.network(
-                          authController.riderDetailsData!.avatar,
-                          fit: BoxFit.cover,
-                          height: 100,
-                          width: 100,
+                      Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: Colors.grey,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Image.network(
+                            authController.riderDetailsData!.avatar,
+                            fit: BoxFit.cover,
+                            height: 100,
+                            width: 100,
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -160,7 +170,7 @@ class _RiderDrawerState extends State<RiderDrawer> {
                   onTap: () {
                     dashboardDrawer="Accounting";
                     setState(() {
-
+                      Get.to(()=> const Accounting());
                     });
                   },
                   child: Container(
@@ -254,10 +264,9 @@ class _RiderDrawerState extends State<RiderDrawer> {
                 InkWell(
                   onTap: () {
                     dashboardDrawer="logOut";
-                    // Get.back();
-                    _showMyDialog();
                     setState(() {
-
+                      // Get.back();
+                      _showMyDialog();
                     });
                   },
                   child: Container(

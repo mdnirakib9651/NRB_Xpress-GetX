@@ -11,17 +11,11 @@ class CheckController extends GetxController{
   List<CheckModel> _checkList = [];
   List<CheckModel> get checkList => _checkList;
 
-
-
   List<bool> _isSelectedList = [];
   List<bool> get isSelectedList => _isSelectedList;
 
   double _amout = 0.0;
   double get amount => _amout;
-
-  List<int> _selectedIdList = [];
-  List<int> get selectedIdList => _selectedIdList;
-
 
   bool _isSelectAll = true;
   bool get isSelectedAll => _isSelectAll;
@@ -66,7 +60,5 @@ class CheckController extends GetxController{
     checkRepo.addToCheeckList(_checkList);
     update();
   }
-
-
 
 }

@@ -26,8 +26,12 @@ class _DashBoardRiderScreenState extends State<DashBoardRiderScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
     authController.getdashBoardData();
+    authController.getLocation();
+    String? token= authController.getToken();
+    debugPrint("Share Preference Token: $token");
+    super.initState();
+    Get.find<AuthController>().getRiderDetails();
   }
   _showMyDialog(){
     showDialog(context: context, builder: (context)
@@ -76,7 +80,8 @@ class _DashBoardRiderScreenState extends State<DashBoardRiderScreen> {
                   setState(() {
                     authController.logOut(latitude: authController.getCurrentPosition!.latitude, longitude: authController.getCurrentPosition!.longitude, address: authController.currentAddress.toString()).then((value){
                       if(value.isSuccess){
-                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LogInHere(isMerchant: false,)), (route) => true);
+                        // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LogInHere(isMerchant: false,)), (route) => true);
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LogInHere(isMerchant: false,)));
                         EasyLoading.showSuccess(value.message);
                       } else{
                         EasyLoading.showSuccess(value.message);

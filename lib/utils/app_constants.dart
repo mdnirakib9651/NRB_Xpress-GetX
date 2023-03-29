@@ -8,7 +8,6 @@ class AppConstants {
   static const String token = 'token';
   static const String userId = 'user_id';
   static const String theme = 'theme';
-  static const String check = 'check';
 
   /// ------------->>>>>> NRB Xpress <<<<<<<--------------
   static const String logIn = '/login';
@@ -18,8 +17,11 @@ class AppConstants {
   static const String changePassword = "/riders/change-password";
   static const String ordersAccounts ='/orders/accounts';
   static const String ordersDetails ='/orders/details';
+  static const String riderAttendence ='/attendances/get';
 
   /// ------------->>>>>> Shared Key <<<<<<<--------------
   static const String isMerchant = 'is_merchant';
+  static const String check = 'check';
+  static const String isLogIn = 'is_login';
 }
 

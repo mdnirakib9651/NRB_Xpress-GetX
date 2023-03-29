@@ -8,6 +8,7 @@ import 'package:merchant/utils/color_resources.dart';
 import 'package:merchant/utils/lato_styles.dart';
 import '../../rider/rider deshboard/rider_deshboard.dart';
 import '../registration/register.dart';
+import 'package:merchant/helper/di_init.dart' as di;
 
 class LogInHere extends StatefulWidget {
   bool isMerchant;
@@ -202,8 +203,16 @@ class _LogInHereState extends State<LogInHere> {
                                     EasyLoading.showError("Location not Found, Please turn on GPS");
                                     return;
                                   }
-                                  authController.logIn(email: email, password: pass, latitude: authController.getCurrentPosition!.latitude, longitude: authController.getCurrentPosition!.longitude, address: authController.currentAddress.toString(), ).then((response){
+                                  authController.logIn(
+                                    email: email,
+                                    password: pass,
+                                    latitude: authController.getCurrentPosition!.latitude,
+                                    longitude: authController.getCurrentPosition!.longitude,
+                                    address: authController.currentAddress.toString(),
+                                  ).then((response){
                                     if(response.isSuccess){
+                                      authController.setILogIn(true);
+                                      di.init();
                                       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const RiderDeshboard()), (route) => true);
                                       EasyLoading.showSuccess(response.message);
                                     } else{

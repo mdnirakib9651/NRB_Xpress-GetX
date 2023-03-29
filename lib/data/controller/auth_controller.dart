@@ -25,7 +25,7 @@ class AuthController extends GetxController implements GetxService {
       // int? userId = loginResponse.id;
       authRepo.saveUserToken(token);
       await authRepo.setLogIn(true);
-      await authRepo.setMerchant(false);
+      debugPrint("-------------------- >>>>>>>>>$token <<<<<<<<<<----------------");
       responseModel = ResponseModel(true, 'Login Successful');
     }
     else{
@@ -43,12 +43,25 @@ class AuthController extends GetxController implements GetxService {
       LogOutModel logOutModel = LogOutModel.fromJson(apiResponse.body);
       authRepo.saveUserToken("");
       await authRepo.setLogIn(false);
-      await authRepo.setMerchant(false);
       responseModel = ResponseModel(true, logOutModel.message);
     } else{
       responseModel = ResponseModel(false, "Failed!");
     }
     return responseModel;
+  }
+
+  /// --------------->>>>>> setIsLogin <<<<<<<----------------
+  Future<void> setILogIn(bool isLogIn) async{
+    await authRepo.setLogIn(isLogIn);
+  }
+
+  /// --------------->>>>>> getIsLogin <<<<<<<----------------
+  bool getIsLogin()  {
+    return  authRepo.getIsLogin() ;
+  }
+  /// --------------->>>>>> Mercent IsLogin <<<<<<<----------------
+  Future<void> setIsMerchant(bool isLogin) async{
+    await authRepo.setMerchant(isLogin);
   }
 
   /// ---------------->>>>>>> DashBoard Data <<<<<<<----------------
@@ -160,6 +173,10 @@ class AuthController extends GetxController implements GetxService {
     await getPlaceMark(position);
     update();
     return position;
+  }
+
+  String? getToken(){
+    return authRepo.getToken();
   }
 
 }

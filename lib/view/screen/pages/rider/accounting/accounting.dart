@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:merchant/utils/color_resources.dart';
 import 'package:merchant/utils/lato_styles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'accounting tabbar/handed_over.dart';
 import 'accounting tabbar/not_handed_over.dart';
 import 'accounting tabbar/pending.dart';
@@ -14,6 +15,15 @@ class Accounting extends StatefulWidget {
 }
 
 class _AccountingState extends State<Accounting> {
+
+  @override
+  void initState() {
+
+    // TODO: implement initState
+    super.initState();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

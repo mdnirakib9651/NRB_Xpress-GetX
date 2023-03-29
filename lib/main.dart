@@ -6,6 +6,7 @@ import 'helper/di_init.dart' as di;
 import 'view/screen/pages/merchant/deshboard screen/dashboard_marchent.dart';
 import 'view/screen/pages/merchant/home screen/home_screen.dart';
 import 'view/screen/pages/merchant/registration/register.dart';
+import 'view/screen/pages/rider/splash screen/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +20,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: "/HomeScreen",
+      initialRoute: "/splashScreen",
       getPages: [
+        GetPage(name: "/splashScreen", page: () => const SplashScreen()),
         GetPage(name: "/NavigationBarDemo", page: () => const MerchantDeshBoard()),
         GetPage(name: "/HomeScreen", page: () => const HomeScreen()),
         GetPage(name: "/Register", page: () => const Register()),

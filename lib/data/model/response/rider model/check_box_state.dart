@@ -1,4 +1,4 @@
-import '../../request/rider repository/account_order_model.dart';
+import 'account_order_model.dart';
 
 class CheckBoxState{
   bool value;
